@@ -1,5 +1,8 @@
 // memory management unit
+#ifndef mmu_guard
 
-#include <stdint.h>
+#define mmu_guard
+    #include <stdint.h>
 
-uint64_t va2pa(uint64_t vaddr);
+    uint64_t va2pa(uint64_t vaddr);
+#endif

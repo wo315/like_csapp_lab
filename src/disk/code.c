@@ -72,6 +72,7 @@ inst_t program[15] =
         {EMPTY, 0, 0, NULL, NULL},
         "retq "
     },
+    // main entry point
     {
         mov_reg_reg,
         {REG, 0, 0, (uint64_t*)&(reg.rdx), NULL},

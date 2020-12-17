@@ -3,6 +3,9 @@
 
 #include "memory/instruction.h"
 #include "cpu/register.h"
+#include "cpu/mmu.h"
+#include "disk/elf.h"
+#include "memory/dram.h"
 
 int main() {
 
@@ -14,22 +17,24 @@ int main() {
     reg.rdx = 0xabcd;
     reg.rsi = 0x7ffffffee2f8;
     reg.rdi = 0x1;
-    reg.rsp = 0x7ffffffee210;
-    reg.rbp = 0x7ffffffee1f0;
+    reg.rbp = 0x7ffffffee210;
+    reg.rsp = 0x7ffffffee1f0;
 
     reg.rip = (uint64_t)&program[11];
 
-    mm[va2pa(0x7ffffffee210)] = 0x08000660;     // rbp
-    mm[va2pa(0x7ffffffee20f)] = 0x0;
-    mm[va2pa(0x7ffffffee200)] = 0xabcd;
-    mm[va2pa(0x7ffffffee1ff)] = 0x12340000;
-    mm[va2pa(0x7ffffffee1f0)] = 0x08000660;     // rsp
-    
-
-
+    write64bits_dram(va2pa(0x7ffffffee210), 0x08000660);
+    write64bits_dram(va2pa(0x7ffffffee208), 0x0);
+    write64bits_dram(va2pa(0x7ffffffee200), 0xabcd);
+    write64bits_dram(va2pa(0x7ffffffee1f8), 0x12340000);
+    write64bits_dram(va2pa(0x7ffffffee1f0), 0x08000660);
+ 
+    print_register();
+    print_stack();
     // run inst
-    for (int i = 0; i < 15; i++) {
-        instrution_cycle();
+    for (int i = 0; i < 3; i++) {
+        instruction_cycle();
+        print_register();
+    print_stack();
     }
 
     // verify
@@ -51,11 +56,11 @@ int main() {
         printf("register not match\n");
     }
 
-    match = match && (mm[va2pa(0x7ffffffee210)] == 0x08000660);     // rbp
-    match = match && (mm[va2pa(0x7ffffffee20f)] == 0x1234abcd);
-    match = match && (mm[va2pa(0x7ffffffee200)] == 0xabcd); 
-    match = match && (mm[va2pa(0x7ffffffee1ff)] == 0x12340000);
-    match = match && (mm[va2pa(0x7ffffffee1f0)] == 0x08000660);     // rsp
+    match = match && (read64bits_dram(va2pa(0x7ffffffee210)) == 0x08000660);     // rbp
+    match = match && (read64bits_dram(va2pa(0x7ffffffee208)) == 0x1234abcd);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee200)) == 0xabcd); 
+    match = match && (read64bits_dram(va2pa(0x7ffffffee1f8)) == 0x12340000);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee1f0)) == 0x08000660);     // rsp
 
     if (match == 1)  {
         printf("memory match\n");
