@@ -87,16 +87,17 @@ void call_handler(uint64_t src, uint64_t dst)
         va2pa(reg.rsp),
         reg.rip + sizeof(inst_t)
     );
-
     reg.rip = src;
 }
 
 void push_reg_handler(uint64_t src, uint64_t dst)
 {
-    
+    // TODO
+    printf("push\n");
 }
 
 void pop_reg_handler(uint64_t src, uint64_t dst)
 {
-
+    // TODO
+    printf("pop\n");
 }
