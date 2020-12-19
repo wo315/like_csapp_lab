@@ -10,6 +10,28 @@
 
 目前课程内容都是3导师的视频，跟着写下来的。
 
+基本实现了老师前7.5节课内容，一模一样。实现了add函数
 
+下一步要开始实现递归的写法
 
+```C
+#include <stdint.h>
+uint64_t sum(uint64_t n)
+{
+    if (n == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return n + sum(n - 1);
+    }
+}
+
+int main()
+{
+    uint64_t a = sum(3);
+    return 0;
+}
+```
 
