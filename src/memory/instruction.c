@@ -83,11 +83,7 @@ void mov_reg_mem_handler(uint64_t src, uint64_t dst) {
 
 void mov_mem_reg_handler(uint64_t src, uint64_t dst) {
   // src: reg
-  // dst: reg
-  write64bits_dram(
-            va2pa(src),
-            *(uint64_t *) dst
-            );
+  *(uint64_t *) dst = read64bits_dram(src);
   reg.rip = reg.rip + sizeof(inst_t);
 }
 
@@ -111,6 +107,13 @@ void push_reg_handler(uint64_t src, uint64_t dst) {
 }
 
 void pop_reg_handler(uint64_t src, uint64_t dst) {
-  // TODO
-  printf("pop\n");
+  *(uint64_t *)src = read64bits_dram(va2pa(reg.rsp));
+  reg.rsp += 8;
+  reg.rip += sizeof(inst_t);
+}
+
+void ret_handler(uint64_t src, uint64_t dst) {
+  uint64_t ret_addr = read64bits_dram(va2pa(reg.rsp));
+  reg.rsp += 8;
+  reg.rip = ret_addr;
 }
