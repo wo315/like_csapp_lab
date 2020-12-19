@@ -1,0 +1,6 @@
+exe_linker
+exe_harder
+*.a
+*.o
+*~
+/.vscode
