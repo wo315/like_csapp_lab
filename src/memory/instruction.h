@@ -14,13 +14,13 @@ typedef enum OP {
     call,        // 5
     ret,         // 6
     add_reg_reg, // 7
-    
+
 } op_t;
 
 typedef enum OD_TYPE
 {
     EMPTY,
-    IMM, REG, 
+    IMM, REG,
     MM_IMM, MM_REG, MM_IMM_REG, MM_REG1_REG2,
     MM_IMM_REG1_REG2, MM_REG2_S, MM_IMM_REG2_S,
     MM_REG1_REG2_S, MM_IMM_REG1_REG2_S
